@@ -3,15 +3,12 @@ package dev.gressier.composebasics
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.gressier.composebasics.ui.theme.ComposeBasicsTheme
@@ -22,8 +19,23 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MyApp {
-                Greeting("Android")
+                MyScreenContent()
             }
+        }
+    }
+}
+
+@Composable
+fun MyScreenContent(names: List<String> = listOf("Android", "There")) {
+    var counterState by remember { mutableStateOf(0) }
+    Column() {
+        names.forEach { name ->
+            Greeting (name = name)
+            Divider()
+        }
+        Counter(count = counterState, updateCount = { newCount -> counterState = newCount })
+        if (counterState > 5) {
+            Text(text = "I ❤️ to count!")
         }
     }
 }
@@ -34,6 +46,13 @@ fun MyApp(content: @Composable () -> Unit) {
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
             content()
         }
+    }
+}
+
+@Composable
+fun Counter(count: Int, updateCount: (Int) -> Unit) {
+    Button(onClick = { updateCount(count + 1) }) {
+        Text(text = "I've been clicked $count times")
     }
 }
 
@@ -49,6 +68,6 @@ fun Greeting(name: String) {
 @Composable
 fun DefaultPreview() {
     MyApp {
-        Greeting("Android")
+        MyScreenContent()
     }
 }
