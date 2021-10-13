@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -27,7 +29,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MyScreenContent(names: List<String> = listOf("Android", "There")) {
+fun MyScreenContent(names: List<String> = List(1000) { "Android $it" }) {
     var counterState by remember { mutableStateOf(0) }
 
     Column(modifier = Modifier.fillMaxHeight()) {
@@ -42,8 +44,8 @@ fun MyScreenContent(names: List<String> = listOf("Android", "There")) {
 
 @Composable
 fun NamesList(names: List<String>, modifier: Modifier = Modifier) {
-    Column(modifier = modifier) {
-        names.forEach { name ->
+    LazyColumn(modifier = modifier) {
+        items(names) { name ->
             Greeting(name = name)
             Divider()
         }
